@@ -8,16 +8,21 @@ use App\Models\Categories;
 use Intervention\Image\Facades\Image as ResizeImage;
 use Illuminate\Support\Facades\File;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\CategoryValidation;
+use Illuminate\Http\RedirectResponse;
+use App\Traits\DdTrait;
 
 class CategoryController extends Controller
 {
+    use DdTrait;
     public function index()
     {
         $categories = Categories::all();
+        // $this->dumpData($categories);
         if ($categories) {
             return view('category/index', compact('categories'));
         } else {
-            return redirect()->route('')->with('error', 'Item limit exceeded for ');
+            return redirect()->route('')->with('error', 'Category Fetching Error');
         }
     }
 
@@ -26,13 +31,9 @@ class CategoryController extends Controller
         return view('category/create');
     }
 
-    public function store(Request $request)
+    public function store(CategoryValidation $request): RedirectResponse
     {
-        $request->validate([
-            'category_name' => 'required',
-            'number_of_items' => 'required',
-            'photo' => 'image|mimes:jpeg,png,jpg|max:5120',
-        ]);
+        $category = new Categories;
         $path = public_path('images/categories/');
         !is_dir($path) && mkdir($path, 0777, true);
 
@@ -41,10 +42,9 @@ class CategoryController extends Controller
             ->resize(100, 100)
             ->save($path . $name);
 
-        $category = new Categories;
-        $category->name = $request->input('category_name');
-        $category->number_of_items = $request->input('number_of_items');
-        $category->status = boolval($request->input('category_status'));
+        $category->name = $request['category_name'];
+        $category->number_of_items = $request['number_of_items'];
+        $category->status = boolval($request['category_status']);
         $category->photo = $name;
         $category->save();
         return redirect()->route('category.index');
@@ -61,7 +61,7 @@ class CategoryController extends Controller
         }
     }
 
-    public function update($id, Request $request)
+    public function update($id, Request $request): RedirectResponse
     {
         $request->validate([
             'category_name' => 'required',
@@ -75,17 +75,15 @@ class CategoryController extends Controller
                     'photo' => 'image|mimes:jpeg,png,jpg|max:5120',
                 ]);
                 $path = public_path('images/categories/');
-                $previousFile = $path . $category->photo;
+                if ($category->photo) {
+                    $previousFile = $path . $category->photo;
+                }
                 $name = time() . '.' . $request->photo->extension();
-                ResizeImage::make($request->file('photo'))
-                    ->resize(400, 400)
-                    ->save($path . $name);
+                ResizeImage::make($request->file('photo'))->resize(400, 400)->save($path . $name);
                 $category->photo = $name;
             } else {
-                $name = "File is not valid.";
+                return redirect()->route('category.edit')->with('error', 'Image Upload Error');
             }
-        } else {
-            $name = "has no file";
         }
         $category->name = $request->input('category_name');
         $category->number_of_items = $request->input('number_of_items');
@@ -97,12 +95,14 @@ class CategoryController extends Controller
 
         return redirect()->route('category.index');
     }
-    public function delete($id)
+    public function delete($id): RedirectResponse
     {
         $category = Categories::find($id);
 
         if ($category) {
             $category->delete();
+        } else {
+            return redirect()->route('category.index')->with('error', 'Category not found, not able to delete');
         }
 
         return redirect()->route('category.index');
@@ -112,13 +112,12 @@ class CategoryController extends Controller
         $categoryId = $request->input('category_id');
         $categoryStatus = $request->input('category_status');
         $category = Categories::find($categoryId);
-
-        if ($category) {
+        if (false) {
             $category->status = $categoryStatus;
-            $category->save();
-            return redirect()->route('category.index');
+            $category->update();
+        } else {
+            return response()->json(['error' => 'Status Update Failed'], 404);
         }
-        return redirect()->route('category.index');
     }
     public function exportUsers()
     {

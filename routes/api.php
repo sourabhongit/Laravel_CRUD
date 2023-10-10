@@ -15,14 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('login', [CategoryController::class, 'login'])->name('login');
+Route::post('login', [CategoryController::class, 'login'])->name('api.login');
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::get('category', [CategoryController::class, 'index'])->name('category.index');
-    Route::post('category/store', [CategoryController::class, 'store'])->name('category.store');
-    Route::get('category/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
-    Route::post('category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
-    Route::get('category/delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
+    Route::get('category', [CategoryController::class, 'index'])->name('api.category.index');
+    Route::post('category/store', [CategoryController::class, 'store'])->name('api.category.store');
+    Route::get('category/edit/{id}', [CategoryController::class, 'edit'])->name('api.category.edit');
+    Route::post('category/update/{id}', [CategoryController::class, 'update'])->name('api.category.update');
+    Route::get('category/{id}/delete/', [CategoryController::class, 'delete'])->name('api.category.delete');
 
     Route::get('items', [ItemController::class, 'index'])->name('api.item.index');
     Route::post('item/store', [ItemController::class, 'store'])->name('api.item.store');

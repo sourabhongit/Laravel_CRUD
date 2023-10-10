@@ -112,9 +112,9 @@ class CategoryController extends Controller
         $response = $category;
         return response($response, 201);
     }
-    public function delete($id)
+    public function delete()
     {
-        $category = Categories::find($id);
+        $category = Categories::find();
 
         if ($category) {
             $category->delete();

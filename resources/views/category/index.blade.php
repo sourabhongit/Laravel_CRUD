@@ -1,7 +1,7 @@
 @extends('layouts.main')
 @section('main-section')
 @if (session('error'))
-<x-alert type="danger"> {{ session('error') }} </x-alert>
+    <x-alert type="danger"> {{ session('error') }} </x-alert>
 @endif
 <section class="content pt-3">
     <div class="container-fluid">
@@ -124,10 +124,16 @@ $(document).ready(function () {
                 _token: '{{ csrf_token() }}',
             },
             success: function (response) {
-                console.log("Status Changed");
+                alert("Status Updated");
             },
-            error: function (error) {
-                console.error(error);
+            error: function (xhr, status, error) {
+                var errorMessage;
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    errorMessage = "Error: " + xhr.responseJSON.error;
+                } else {
+                    errorMessage = "Error: " + error;
+                }
+                alert(errorMessage);
             },
         });
     });
