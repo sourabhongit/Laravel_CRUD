@@ -15,18 +15,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('login', [CategoryController::class, 'login'])->name('api.login');
+Route::post('admin/login', [CategoryController::class, 'login'])->name('api.admin.login');
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::get('category', [CategoryController::class, 'index'])->name('api.category.index');
-    Route::post('category/store', [CategoryController::class, 'store'])->name('api.category.store');
-    Route::get('category/edit/{id}', [CategoryController::class, 'edit'])->name('api.category.edit');
-    Route::post('category/update/{id}', [CategoryController::class, 'update'])->name('api.category.update');
-    Route::get('category/{id}/delete/', [CategoryController::class, 'delete'])->name('api.category.delete');
+    Route::get('admin/categories', [CategoryController::class, 'index'])->name('api.admin.category.index');
+    Route::post('admin/category/store', [CategoryController::class, 'store'])->name('api.admin.category.store');
+    Route::get('admin/category/{id}/edit', [CategoryController::class, 'edit'])->name('api.admin.category.edit');
+    Route::post('admin/category/{id}/update', [CategoryController::class, 'update'])->name('api.admin.category.update');
+    Route::delete('admin/category/{id}/delete', [CategoryController::class, 'delete'])->name('api.admin.category.delete');
 
-    Route::get('items', [ItemController::class, 'index'])->name('api.item.index');
-    Route::post('item/store', [ItemController::class, 'store'])->name('api.item.store');
-    Route::get('item/edit/{id}', [ItemController::class, 'edit'])->name('api.item.edit');
-    Route::post('item/update/{id}', [ItemController::class, 'update'])->name('api.item.update');
-    Route::get('item/delete/{id}', [ItemController::class, 'delete'])->name('api.item.delete');
+    Route::get('admin/items', [ItemController::class, 'index'])->name('api.admin.item.index');
+    Route::post('admin/item/store', [ItemController::class, 'store'])->name('api.admin.item.store');
+    Route::get('admin/item/{id}/edit', [ItemController::class, 'edit'])->name('api.admin.item.edit');
+    Route::post('admin/item/{id}/update', [ItemController::class, 'update'])->name('api.admin.item.update');
+    Route::get('admin/item/{id}/delete', [ItemController::class, 'delete'])->name('api.admin.item.delete');
 });
