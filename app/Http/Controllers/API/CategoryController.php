@@ -112,16 +112,15 @@ class CategoryController extends Controller
         $response = $category;
         return response($response, 201);
     }
-    public function delete()
+    public function delete($id)
     {
-        $category = Categories::find();
+        $category = Categories::findOrFail($id);
 
-        if ($category) {
-            $category->delete();
-        }
+        $category->delete();
 
         return response($category->name . " : Category Deleted");
     }
+
     public function updateStatus(Request $request)
     {
         $categoryId = $request->input('category_id');

@@ -89,11 +89,9 @@ class ItemController extends Controller
     }
     public function delete($id)
     {
-        $item = Items::find($id);
+        $item = Items::findOrFail($id);
 
-        if ($item) {
-            $item->delete();
-        }
+        $item->delete();
 
         return response($item->name . " : Item Deleted");
     }
