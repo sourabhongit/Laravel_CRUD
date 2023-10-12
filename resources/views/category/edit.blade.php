@@ -54,7 +54,7 @@
             <div class="col-lg-6 col-md-6 col-sm-12">
                 <label for="exampleInputFile" class="form-label">Upload Photo</label>
                 <input type="file" class="form-control mb-3" id="exampleInputFile" name="photo" />
-                <img style="width: 100px; border:5px solid #dee2e6;" src="{{ asset('images/categories') . '/' . $category->photo }}" alt="No Category Image" >
+                <img style="width: 100px; border:5px solid #dee2e6;" src="{{ asset('storage') . '/' . $category->photo}}" alt="No Category Image" >
                 <span class="text-danger">
                     @error('photo') {{$message}} @enderror
                 </span>

@@ -9,10 +9,17 @@ class Items extends Model
 {
     use HasFactory;
 
-    protected $table = 'items';
+    protected $fillable = [
+        'name',
+        'category_id',
+        'price',
+        'description',
+        'photo',
+        'status',
+    ];
 
     public function Categories()
     {
-        return $this->belongsTo(Categories::class,'category_id','id');
+        return $this->belongsTo(Categories::class, 'category_id', 'id');
     }
 }
