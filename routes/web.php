@@ -71,7 +71,7 @@ Route::middleware(['auth', 'role:admin|editor'])->group(function () {
 
     Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
     Route::get('/category/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
-    Route::post('/category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
+    Route::patch('/category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
 
     Route::get('export-categories', [CategoryController::class, 'exportUsers'])->name('export-categories');
     Route::get('generate-pdf', [PDFController::class, 'generatePDF'])->name('generatePDF');
