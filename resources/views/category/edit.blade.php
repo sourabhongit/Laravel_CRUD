@@ -6,6 +6,7 @@
         <h3 class="card-title">Edit Category</h3>
     </div>
     <form action="{{ route('category.update', ['id' => $id])}}" method="post" enctype="multipart/form-data">
+        @method('PATCH')
         @csrf
         <div class="card-body">
         <div class="row">
