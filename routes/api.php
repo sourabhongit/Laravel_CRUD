@@ -21,7 +21,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('admin/categories', [CategoryController::class, 'index'])->name('api.admin.category.index');
     Route::post('admin/category/store', [CategoryController::class, 'store'])->name('api.admin.category.store');
     Route::get('admin/category/{id}/edit', [CategoryController::class, 'edit'])->name('api.admin.category.edit');
-    Route::post('admin/category/{id}/update', [CategoryController::class, 'update'])->name('api.admin.category.update');
+    Route::patch('admin/category/{id}/update', [CategoryController::class, 'update'])->name('api.admin.category.update');
     Route::delete('admin/category/{id}/delete', [CategoryController::class, 'delete'])->name('api.admin.category.delete');
 
     Route::get('admin/items', [ItemController::class, 'index'])->name('api.admin.item.index');
