@@ -15,23 +15,33 @@ class RolesAndPermissionsSeeder extends Seeder
         app()['cache']->forget('spatie.permission.cache');
 
         // Define permissions
-        $permissions = [
-            'create user',
-            'edit user',
-            'delete user',
-        ];
+        // $permissions = [
+        //     'import data',
+        //     'export data',
+        // ];
 
         // Create permissions in the database
+        // foreach ($permissions as $permission) {
+        //     Permission::create(['name' => $permission]);
+        // }
+
+        // Assign new permissions to roles
+        $adminRole = Role::findByName('editor');
+        $permissions = Permission::whereIn('name', ['export data'])->get();
+
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            $adminRole->givePermissionTo($permission);
         }
 
-        // Define roles and assign permissions
-        $adminRole = Role::create(['name' => 'admin']);
-        $editorRole = Role::create(['name' => 'editor']);
+        // Assign permissions to roles - Previous permissions for the role will be deleted.
+        // $adminRole = Role::findByName('admin');
+        // $permissions = Permission::whereIn('name', ['import data', 'export data'])->get();
+        // $adminRole->syncPermissions($permissions);
 
-        // Assign permissions to roles
-        $adminRole->syncPermissions($permissions);
-        $editorRole->givePermissionTo('create user', 'edit user');
+        // Define roles and assign permissions
+        // $adminRole = Role::create(['name' => 'admin']);
+        // $editorRole = Role::create(['name' => 'editor']);
+        // $adminRole->syncPermissions($permissions);
+        // $editorRole->givePermissionTo('export data');
     }
 }
