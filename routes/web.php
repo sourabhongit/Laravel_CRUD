@@ -9,6 +9,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\SendMailableController;
+use App\Http\Controllers\ExcelController;
+use App\Http\Controllers\CsvController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +60,34 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/category/store', [CategoryController::class, 'store'])->name('category.store');
     Route::get('/category/delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
     Route::post('/category/update-status', [CategoryController::class, 'updateStatus'])->name('category.update-status');
+
+    // Excel Export & Import
+    Route::get('admin/bulk/data', [ExcelController::class, 'index'])->defaults('_action', [
+        'view' => 'excel.index',
+    ])->name('admin.bulk.data.excel.index');
+    Route::post('admin/bulk/data/import', [ExcelController::class, 'import'])->defaults('_action', [
+        'redirect' => 'admin.bulk.data.excel.edit',
+    ])->name('admin.bulk.data.excel.import');
+    Route::get('admin/bulk/data/edit', [ExcelController::class, 'edit'])->defaults('_action', [
+        'view' => 'excel.edit',
+    ])->name('admin.bulk.data.excel.edit');
+    Route::get('admin/bulk/data/export', [ExcelController::class, 'export'])->defaults('_action', [
+        'return' => 'excel.index',
+    ])->name('admin.bulk.data.excel.export');
+
+    // CSV Export & Import
+    Route::get('admin/bulk/CSV/data', [CsvController::class, 'index'])->defaults('_action', [
+        'view' => 'csv.index',
+    ])->name('admin.bulk.data.csv.index');
+    Route::post('admin/bulk/CSV/data/import', [CsvController::class, 'import'])->defaults('_action', [
+        'redirect' => 'admin.bulk.data.csv.edit',
+    ])->name('admin.bulk.data.csv.import');
+    Route::get('admin/bulk/CSV/data/edit', [CsvController::class, 'edit'])->defaults('_action', [
+        'view' => 'csv.edit',
+    ])->name('admin.bulk.data.csv.edit');
+    Route::get('admin/bulk/CSV/data/export', [CsvController::class, 'export'])->defaults('_action', [
+        'return' => 'csv.index',
+    ])->name('admin.bulk.data.csv.export');
 });
 
 Route::middleware(['auth', 'role:admin|editor'])->group(function () {
