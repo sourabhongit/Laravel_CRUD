@@ -7,12 +7,7 @@
             <div class="card-header" style="height: fit-content">
                 <div class="d-flex">
                     <div>
-                        <h3>Data</h3>
-                    </div>
-                    <div class="ml-auto">
-                        <a href="{{route('admin.bulk.data.csv.export')}}">
-                            <button class="btn btn-info">Export</button>
-                        </a>
+                        <h3>logs</h3>
                     </div>
                 </div>
             </div>
@@ -30,15 +25,23 @@
                             >
                                 <thead>
                                     <tr class="text-center">
-                                        <th>Name</th>
-                                        <th>Email</th>
+                                        <th>SN</th>
+                                        <th>User ID</th>
+                                        <th>Record ID</th>
+                                        <th>Status</th>
+                                        <th>Remark</th>
+                                        <th>Created at</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($csvs as $csv)
+                                    @foreach ($logs as $key => $log)
                                     <tr class="text-center">
-                                        <td>{{ $csv->name }}</td>
-                                        <td>{{ $csv->email }}</td>
+                                        <td>{{ ++$key }}</td>
+                                        <td>{{ $log->users->name }}</td>
+                                        <td>{{ $log->record_id }}</td>
+                                        <td>{{ $log->new_status }}</td>
+                                        <td>{{ $log->remark }}</td>
+                                        <td>{{ date_format($log->created_at, 'd-m-Y') }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>

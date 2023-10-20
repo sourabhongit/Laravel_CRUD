@@ -58,27 +58,53 @@
                 </li>
                 @can(['export data', 'import data'])
                 <li class="nav-item">
-                    <a href="{{route('admin.bulk.data.excel.index')}}"
-                    @if(request()->routeIs('admin.bulk.data.excel.index'))
+                    <a href="{{route('admin.excel.records.index')}}"
+                    @if(request()->routeIs('admin.excel.records.index'))
                     class="nav-link active"
                     @else
                     class="nav-link"
                     @endif>
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Simple Excel</p>
+                        <p>Excel</p>
                     </a>
                 </li>
                 @endcan
                 @can(['export data', 'import data'])
                 <li class="nav-item">
-                    <a href="{{route('admin.bulk.data.csv.index')}}"
-                    @if(request()->routeIs('admin.bulk.data.csv.index'))
+                    <a href="{{route('admin.csv.records.index')}}"
+                    @if(request()->routeIs('admin.csv.records.index'))
                     class="nav-link active"
                     @else
                     class="nav-link"
                     @endif>
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Simple CSV</p>
+                        <p>CSV</p>
+                    </a>
+                </li>
+                @endcan
+				@can(['export data', 'import data'])
+                <li class="nav-item">
+                    <a href="{{route('admin.records.index')}}"
+                    @if(request()->routeIs('admin.records.index'))
+                    class="nav-link active"
+                    @else
+                    class="nav-link"
+                    @endif>
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Records</p>
+                    </a>
+                </li>
+                @endcan
+				@can(['export data', 'import data'])
+                <li class="nav-item">
+                    <a href="{{route('log.index')}}"
+                    @if(request()->routeIs('log.index'))
+                    class="nav-link active"
+                    @else
+                    class="nav-link"
+                    @endif>
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Record Logs</p>
                     </a>
                 </li>
                 @endcan

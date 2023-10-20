@@ -6,11 +6,11 @@ use App\Jobs\SendEmailJob;
 
 class EmailController extends Controller
 {
-    public function sendEmail()
-    {
-        $details = [
-            'name' => 'Example',
-        ];
-        dispatch(new SendEmailJob($details));
-    }
+	public function sendEmail()
+	{
+		$details = [
+			'name' => 'Example',
+		];
+		dispatch(new SendEmailJob($details));
+	}
 }

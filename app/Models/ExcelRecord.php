@@ -5,14 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Categories extends Model
+class ExcelRecord extends Model
 {
 	use HasFactory;
 
 	protected $fillable = [
-		'name',
-		'number_of_items',
-		'photo',
-		'status'
+		'first_name',
+		'last_name',
+		'email',
+		'number',
+		'remark',
+		'status',
 	];
 }
