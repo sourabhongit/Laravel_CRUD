@@ -86,7 +86,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 		'redirect' => 'admin.csv.records.index',
 	])->name('admin.csv.records.export');
 
-	//* Import/export with Modal view
+	//* Import/export excel with Modal view
 	Route::get('admin/records', [ExcelRecordController::class, 'index'])->defaults('_action', [
 		'view' => 'records.index',
 	])->name('admin.records.index');
@@ -96,6 +96,17 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 	Route::get('admin/records/export', [ExcelRecordController::class, 'export'])->name('admin.records.export');
 	Route::post('/admin/records/save', [ExcelRecordController::class, 'saveData'])->name('admin.records.save');
 	Route::post('/admin/record/update-status', [ExcelRecordController::class, 'updateStatus'])->name('admin.record.update-status');
+
+	//* Import/export csv with Modal view
+	Route::get('admin/records/csv', [CsvController::class, 'index'])->defaults('_action', [
+		'view' => 'csv_records_modal.index',
+	])->name('admin.records.csv.index');
+	Route::post('admin/records/csv/import', [CsvController::class, 'import'])->defaults('_action', [
+		'redirect' => 'admin.records.csv.index',
+	])->name('admin.records.csv.import');
+	Route::get('admin/records/csv/export', [CsvController::class, 'export'])->name('admin.records.csv.export');
+	Route::post('/admin/records/csv/save', [CsvController::class, 'saveData'])->name('admin.records.csv.save');
+	Route::post('/admin/csv/record/update-status', [CsvController::class, 'updateStatus'])->name('admin.csv.record.update-status');
 
 	//* Record Logs
 	Route::get('/record/logs', [RecordLogsController::class, 'index'])->name('log.index');
