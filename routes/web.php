@@ -12,6 +12,7 @@ use App\Http\Controllers\SendMailableController;
 use App\Http\Controllers\ExcelRecordController;
 use App\Http\Controllers\CsvController;
 use App\Http\Controllers\RecordLogsController;
+use App\Http\Controllers\CarbonController;
 
 /*
 |--------------------------------------------------------------------------
@@ -111,6 +112,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 	//* Record Logs
 	Route::get('/record/logs', [RecordLogsController::class, 'index'])->name('log.index');
 	Route::post('/record/log/add', [RecordLogsController::class, 'log'])->name('log.add');
+
+	//* Carbon Age Calculator
+	Route::get('/carbon/age', [CarbonController::class, 'index'])->name('carbon.age.index');
+	Route::post('/carbon/age/calculate', [CarbonController::class, 'calculateAge'])->name('carbon.age.calculate');
 });
 
 Route::middleware(['auth', 'role:admin|editor'])->group(function () {

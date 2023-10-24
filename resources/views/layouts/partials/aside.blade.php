@@ -98,6 +98,17 @@
                         </a>
                     </li>
                 @endcan
+                @can(['export data', 'import data'])
+                    <li class="nav-item">
+                        <a href="{{ route('carbon.age.index') }}"
+                            @if (request()->routeIs('carbon.age.index')) class="nav-link active"
+				@else
+				class="nav-link" @endif>
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Calculate Age</p>
+                        </a>
+                    </li>
+                @endcan
             </ul>
         </nav>
     </div>
