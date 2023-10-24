@@ -93,6 +93,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 	Route::post('admin/records/import', [ExcelRecordController::class, 'import'])->defaults('_action', [
 		'redirect' => 'admin.records.index',
 	])->name('admin.records.import');
+	Route::get('admin/records/export', [ExcelRecordController::class, 'export'])->name('admin.records.export');
 	Route::post('/admin/records/save', [ExcelRecordController::class, 'saveData'])->name('admin.records.save');
 	Route::post('/admin/record/update-status', [ExcelRecordController::class, 'updateStatus'])->name('admin.record.update-status');
 

@@ -7,7 +7,9 @@ use App\Models\Record;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ExcelRecords;
-// use App\Exports\ExcelRecords as ExportExcelRecords;
+use PHPUnit\Framework\Constraint\ArrayHasKey;
+
+use App\Exports\ExcelRecords as ExportExcelRecords;
 
 class ExcelRecordController extends Controller
 {
@@ -38,45 +40,38 @@ class ExcelRecordController extends Controller
 	//* With records modal view and status
 	public function index()
 	{
-		$Records = Record::all();
-		if ($Records) {
-			return view($this->_action['view'], compact('Records'));
+		$records = Record::all();
+		if ($records) {
+			return view($this->_action['view'], compact('records'));
 		}
 	}
 
 	public function import(Request $request)
 	{
-		$import = new ExcelRecords;
-		$importedData = Excel::toCollection($import, $request->file('recordsFile'));
+		$importedData = Excel::toCollection(new ExcelRecords, $request->file('recordsFile'));
 		// $importedData = Excel::import($import, $request->file('recordsFile'));
 		$data = $importedData[0];
 		return response()->json($data);
 	}
 	public function saveData(Request $request)
 	{
-		dd($request->all());
-		$requestedRecords = $request->input('records');
-		$recordsToInsert = [];
-		foreach ($requestedRecords as $requestedRecord) {
-			$record = new Record;
-			array_shift($requestedRecord);
-			$dateString = $requestedRecord[0];
-			$date = date_create_from_format('d M Y', $dateString);
-			$record = [
-				'date' => $date ? $date->format('Y-m-d') : null,
-				'type' => $requestedRecord[1],
-				'description' => $requestedRecord[2],
-				'debit' => ($requestedRecord[3] === 'null') ? null : $requestedRecord[3],
-				'credit' => ($requestedRecord[4] === 'null') ? null : $requestedRecord[4],
-				'status' => ($requestedRecord[5] === 'false') ? 0 : 1,
-			];
-			$recordsToInsert[] = $record;
+		try {
+			for ($i = 0; $i < count($request->date); $i++) {
+				$record = new Record;
+				$date = date_create_from_format('d M Y', $request->date[$i]);
+				$record->date = $date ? $date->format('Y-m-d') : null;
+				$record->type = $request->type[$i];
+				$record->description = $request->description[$i];
+				$record->debit = ($request->debit[$i] === 'null') ? null : $request->debit[$i];
+				$record->credit = ($request->credit[$i] === 'null') ? null : $request->credit[$i];
+				$record->status = $request->has('status.' . $i) ? 1 : 0;
+				$record->save();
+			}
+		} catch (\Throwable $th) {
+			return redirect()->back()->with('error', 'An error occurred while saving records.');
 		}
-		if (!empty($recordsToInsert)) {
-			Record::insert($recordsToInsert);
-		}
-		return response()->json($data = ['redirect' => 'admin.records.index'], 200);
 	}
+
 	public function updateStatus(Request $request)
 	{
 		$recordId = $request->input('record_id');
@@ -87,5 +82,10 @@ class ExcelRecordController extends Controller
 			$record->status = $recordStatus;
 			$record->save();
 		}
+	}
+
+	public function export()
+	{
+		return Excel::download(new ExportExcelRecords, 'dataRecords.xlsx');
 	}
 }

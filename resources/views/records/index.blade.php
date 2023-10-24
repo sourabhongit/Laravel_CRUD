@@ -11,33 +11,34 @@
                             <h3>Records</h3>
                         </div>
                         <div class="ml-auto">
-                            <a href="#">
+                            <a href="{{ route('admin.records.export') }}">
                                 <button class="btn btn-info">Export</button>
                             </a>
                             <!-- Modal -->
                             <div class="modal fade" id="exampleModalToggle" aria-hidden="true"
                                 aria-labelledby="exampleModalToggleLabel" tabindex="-1">
                                 <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalToggleLabel">Choose File</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form id="uploadForm" enctype="multipart/form-data">
-                                                @csrf
+                                    <form id="uploadForm" enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalToggleLabel">Choose File</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
                                                 <div class="input-group mb-3">
                                                     <input type="file" name="recordsFile" class="form-control"
                                                         id="inputGroupFile02">
                                                     <label class="input-group-text" for="inputGroupFile02">Upload</label>
                                                 </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary"
+                                                    id="submitButton">Submit</button>
+                                            </div>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary" id="submitButton">Submit</button>
-                                        </div>
-                                        </form>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                             <div class="modal fade" id="exampleModalToggle2" aria-hidden="true"
@@ -49,30 +50,30 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
-                                        <div class="modal-body" id="Records-body">
-                                            <table class="table table-bordered table-striped dataTable dtr-inline">
-                                                <thead>
-                                                    <tr class="text-center">
-                                                        <th>SN</th>
-                                                        <th>Date</th>
-                                                        <th>Type</th>
-                                                        <th>Description</th>
-                                                        <th>Debit</th>
-                                                        <th>Credit</th>
-                                                        <th>Status</th>
-                                                    </tr>
-                                                </thead>
-                                                <form id="tableDataForm" enctype="multipart/form-data">
-                                                    @csrf
+                                        <form id="tableDataForm" enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="modal-body" id="Records-body">
+                                                <table class="table table-bordered table-striped dataTable dtr-inline">
+                                                    <thead>
+                                                        <tr class="text-center">
+                                                            <th>SN</th>
+                                                            <th>Date</th>
+                                                            <th>Type</th>
+                                                            <th>Description</th>
+                                                            <th>Debit</th>
+                                                            <th>Credit</th>
+                                                            <th>Status</th>
+                                                        </tr>
+                                                    </thead>
+
                                                     <tbody id="table-body">
                                                     </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type='submit' class="btn btn-primary"
-                                                data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
-                                                data-bs-dismiss="modal">Save</button>
-                                        </div>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type='submit' class="btn btn-primary" data-bs-toggle="modal"
+                                                    data-bs-dismiss="modal">Save</button>
+                                            </div>
                                         </form>
                                     </div>
                                 </div>
@@ -100,22 +101,22 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($Records as $key => $Record)
+                                        @foreach ($records as $key => $record)
                                             <tr class="text-center">
                                                 <td>{{ ++$key }}</td>
-                                                <td>{{ $Record->date }}</td>
-                                                <td>{{ $Record->type }}</td>
-                                                <td>{{ $Record->description }}</td>
-                                                <td>{{ $Record->debit }}</td>
-                                                <td>{{ $Record->credit }}</td>
+                                                <td>{{ $record->date }}</td>
+                                                <td>{{ $record->type }}</td>
+                                                <td>{{ $record->description }}</td>
+                                                <td>{{ $record->debit }}</td>
+                                                <td>{{ $record->credit }}</td>
                                                 <td class="text-center">
                                                     <div class="form-check text-center form-switch">
                                                         <input name="record-status"
                                                             class="form-check-input record-status toggle-button"
-                                                            type="checkbox" data-record-id="{{ $Record->id }}"
+                                                            type="checkbox" data-record-id="{{ $record->id }}"
                                                             data-update-url="{{ route('admin.record.update-status') }}"
                                                             id="flexSwitchCheckDefault"
-                                                            {{ $Record->status ? 'checked' : '' }}>
+                                                            {{ $record->status ? 'checked' : '' }}>
                                                     </div>
                                         @endforeach
                                     </tbody>
@@ -210,19 +211,23 @@
                         tableBody.empty();
                         $.each(importedData, function(index, record) {
                             var tableData = `
-            <tr class="text-center">
-                <td>${index + 1}</td>
-                <td><input type="text" name="[date]" value="${record[0]}"></td>
-                <td><input type="text" name="[type]" value="${record[1]}"></td>
-                <td><input type="text" name="[description]" value="${record[2]}"></td>
-                <td><input type="text" name="[debit]" value="${record[3]}"></td>
-                <td><input type="text" name="[credit]" value="${record[4]}"></td>
-                <td class="status-column">
-                    <div class="form-check form-switch">
-                        <input type="checkbox" class="form-check-input record-status toggle-button" name="[status]" id="flexSwitchCheckDefault">
-                    </div>
-                </td>
-            </tr>`;
+            					<tr class="text-center">
+                					<td>${index + 1}</td>
+                					<td><input type="text" class="form-control" name="date[${index}]" value="${record[0]}"></td>
+                					<td><input type="text" class="form-control" name="type[${index}]" value="${record[1]}"></td>
+                					<td><input type="text" class="form-control" name="description[${index}]" value="${record[2]}"></td>
+                					<td><input type="text" class="form-control" name="debit[${index}]" value="${record[3]}"></td>
+                					<td><input type="text" class="form-control" name="credit[${index}]" value="${record[4]}"></td>
+                					<td class="status-column">
+                    					<div class="form-check form-switch">
+                        					<input
+												type="checkbox"
+												class="form-check-input record-status toggle-button"
+												name="status[${index}]"
+												id="flexSwitchCheckDefault">
+                    					</div>
+                					</td>
+            					</tr>`;
                             tableBody.append(tableData);
                         });
 
@@ -240,15 +245,17 @@
                 var form = $('#tableDataForm')[0];
 
                 var formData = new FormData(form);
-                console.log(formData);
-                return;
                 $.ajax({
                     type: 'POST',
                     url: '{{ route('admin.records.save') }}',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
                     data: formData,
                     processData: false,
                     contentType: false,
                     success: function(response) {
+                        console.log('Records saved');
                         window.location = 'http://127.0.0.1:8000/admin/records';
                     },
                     error: function(error) {
